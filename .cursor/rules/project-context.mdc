@@ -1,0 +1,10 @@
+---
+description: Project context and next steps for CodeWorld
+globs: ["**/*"]
+---
+
+Read **AGENTS.md** at the project root for project context: stack, commands, structure, conventions, and quality gates.
+
+For what to work on next, use **ROADMAP.md**: it lists the next phases (E2E testing, full auth, new features, backend, docs, observability). Pick the next phase from there and implement it.
+
+When making changes, run `pnpm run lint` and `pnpm run typecheck` (and `pnpm run test` when touching code under test) when possible.

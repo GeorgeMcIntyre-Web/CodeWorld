@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, NavLink, Outlet } from 'react-router-dom'
 import Home from './pages/Home'
+import Login from './pages/Login'
 import Playground from './pages/Playground'
 import Settings from './pages/Settings'
 
@@ -18,6 +19,9 @@ function Layout() {
           <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
             Settings
           </NavLink>
+          <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Sign in
+          </NavLink>
         </nav>
       </header>
       <div className="body">
@@ -31,6 +35,9 @@ function Layout() {
             </NavLink>
             <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
               Settings
+            </NavLink>
+            <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
+              Sign in
             </NavLink>
           </nav>
         </aside>
@@ -50,6 +57,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="playground" element={<Playground />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="login" element={<Login />} />
         </Route>
       </Routes>
     </BrowserRouter>

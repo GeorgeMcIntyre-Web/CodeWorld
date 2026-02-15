@@ -123,6 +123,14 @@ body {
   padding: 1.25rem;
 }
 
+.card code {
+  font-size: 0.9em;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
 button {
   font: inherit;
   cursor: pointer;
