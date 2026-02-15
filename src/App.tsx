@@ -1,10 +1,16 @@
 import { BrowserRouter, Routes, Route, NavLink, Outlet } from 'react-router-dom'
+import { useAuth } from './contexts/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Playground from './pages/Playground'
 import Settings from './pages/Settings'
+import Tools from './pages/Tools'
+import Base64 from './pages/tools/Base64'
+import JsonFormatter from './pages/tools/JsonFormatter'
 
 function Layout() {
+  const { user, loading, logoutUrl } = useAuth()
+
   return (
     <div className="app">
       <header className="topbar">
@@ -16,12 +22,27 @@ function Layout() {
           <NavLink to="/playground" className={({ isActive }) => (isActive ? 'active' : '')}>
             Playground
           </NavLink>
+          <NavLink to="/tools" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Tools
+          </NavLink>
           <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
             Settings
           </NavLink>
-          <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
-            Sign in
-          </NavLink>
+          {!loading &&
+            (user ? (
+              <>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                  Signed in as {user.name || user.login}
+                </span>
+                <a href={logoutUrl} style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                  Sign out
+                </a>
+              </>
+            ) : (
+              <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Sign in
+              </NavLink>
+            ))}
         </nav>
       </header>
       <div className="body">
@@ -33,12 +54,20 @@ function Layout() {
             <NavLink to="/playground" className={({ isActive }) => (isActive ? 'active' : '')}>
               Playground
             </NavLink>
+            <NavLink to="/tools" className={({ isActive }) => (isActive ? 'active' : '')}>
+              Tools
+            </NavLink>
             <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
               Settings
             </NavLink>
-            <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Sign in
-            </NavLink>
+            {!loading &&
+              (user ? (
+                <a href={logoutUrl}>Sign out</a>
+              ) : (
+                <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Sign in
+                </NavLink>
+              ))}
           </nav>
         </aside>
         <main className="main">
@@ -58,6 +87,9 @@ export default function App() {
           <Route path="playground" element={<Playground />} />
           <Route path="settings" element={<Settings />} />
           <Route path="login" element={<Login />} />
+          <Route path="tools" element={<Tools />} />
+          <Route path="tools/json" element={<JsonFormatter />} />
+          <Route path="tools/base64" element={<Base64 />} />
         </Route>
       </Routes>
     </BrowserRouter>

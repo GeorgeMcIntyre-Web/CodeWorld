@@ -24,13 +24,14 @@ Use this file for project context so Cursor, Claude Code, Antigravity, and Codex
 - `pnpm run lint` – ESLint + Prettier check
 - `pnpm run typecheck` – TypeScript check (no emit)
 - `pnpm run test` – Vitest unit tests
+- `pnpm run test:e2e` – Playwright E2E tests (build + preview, then run e2e)
 
 After making edits, run `pnpm run lint` and `pnpm run typecheck` (and `pnpm run test` when touching code under test) when possible.
 
 ## Structure
 
 - **Root:** `package.json`, `vite.config.ts`, `tsconfig.json`, `index.html`, `public/` (e.g. `_redirects`).
-- **src:** `main.tsx`, `App.tsx`, `App.css`; `pages/` (Home, Playground, Settings, Login); `lib/` (e.g. `textStats.ts`); `hooks/` (e.g. `useTheme.ts`).
+- **src:** `main.tsx`, `App.tsx`, `App.css`; `pages/` (Home, Playground, Settings, Login, Tools, tools/JsonFormatter, tools/Base64); `contexts/` (AuthContext); `lib/`, `hooks/`. **functions:** `functions/api/auth/` (login, callback, me, logout) for GitHub OAuth when using Pages with Git.
 - **Config:** ESLint (flat config), Prettier, Vitest in `vite.config.ts`.
 - Key entry: `src/App.tsx` (router + layout). Next steps: see `ROADMAP.md`.
 
@@ -48,4 +49,4 @@ After making edits, run `pnpm run lint` and `pnpm run typecheck` (and `pnpm run 
 
 ## Next steps
 
-See **ROADMAP.md** for phases and priorities: E2E testing, full auth (Cloudflare Access or OAuth), new features and pages, optional backend/API, docs and accessibility, observability. Pick the next phase from there and implement it.
+See **ROADMAP.md** for phases and priorities: full auth (OAuth in-app optional), new features and pages, optional backend/API, docs and accessibility, observability. Cloudflare Access (whole-site protection) is documented in README. Pick the next phase from there and implement it.

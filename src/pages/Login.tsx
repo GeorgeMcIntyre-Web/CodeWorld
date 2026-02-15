@@ -24,10 +24,26 @@ export default function Login() {
             </button>
           </>
         ) : (
-          <p style={{ margin: 0, color: 'var(--text-muted)' }}>
-            Auth is not configured. Set <code>VITE_AUTH_URL</code> in your environment (e.g. your
-            Cloudflare Access login URL) and rebuild to enable sign-in.
-          </p>
+          <>
+            <p style={{ margin: 0 }}>Sign in with GitHub to access CodeWorld.</p>
+            <a
+              href="/api/auth/login"
+              className="primary"
+              style={{
+                display: 'inline-block',
+                marginTop: '1rem',
+                padding: '0.5rem 1rem',
+                borderRadius: '6px',
+                background: 'var(--accent)',
+                color: '#fff',
+                textDecoration: 'none',
+                font: 'inherit',
+                border: '1px solid var(--accent)',
+              }}
+            >
+              Sign in with GitHub
+            </a>
+          </>
         )}
       </div>
     </>

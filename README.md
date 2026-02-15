@@ -19,15 +19,16 @@ pnpm install
 
 ## Scripts
 
-| Command              | Description                    |
-| -------------------- | ------------------------------ |
-| `pnpm run dev`       | Start dev server (e.g. :5173)  |
-| `pnpm run build`     | Production build to `dist/`    |
-| `pnpm run preview`   | Serve production build locally |
-| `pnpm run deploy`   | Build and deploy to Cloudflare Pages |
-| `pnpm run lint`      | Run ESLint + Prettier check    |
-| `pnpm run typecheck` | Run TypeScript check (no emit) |
-| `pnpm run test`      | Run Vitest unit tests          |
+| Command              | Description                          |
+| -------------------- | ------------------------------------ |
+| `pnpm run dev`       | Start dev server (e.g. :5173)        |
+| `pnpm run build`     | Production build to `dist/`          |
+| `pnpm run preview`   | Serve production build locally       |
+| `pnpm run deploy`    | Build and deploy to Cloudflare Pages |
+| `pnpm run lint`      | Run ESLint + Prettier check          |
+| `pnpm run typecheck` | Run TypeScript check (no emit)       |
+| `pnpm run test`      | Run Vitest unit tests                |
+| `pnpm run test:e2e`  | Run Playwright E2E tests             |
 
 ## Run locally
 
@@ -44,10 +45,32 @@ A **Sign in** link in the top bar and sidebar goes to `/login`. To enable sign-i
 
 - Create a `.env` file (or set in your deployment environment) with:
   - `VITE_AUTH_URL=<your-auth-url>`  
-  Example: your Cloudflare Access login URL, or an OAuth provider’s authorization URL.
+    Example: your Cloudflare Access login URL, or an OAuth provider’s authorization URL.
 - Run `pnpm run build` (or `pnpm run dev`) so the app picks up the variable.
 
 With `VITE_AUTH_URL` set, the Login page shows a **Sign in** button that redirects to that URL so you can complete auth.
+
+### GitHub OAuth (in-app sign-in)
+
+To let users sign in with GitHub and see “Signed in as …” and Sign out in the app:
+
+1. **Connect the repo to Cloudflare Pages with Git** (required for server-side auth). In Pages → Create project → **Connect to Git**, select the repo. Set **Build command** to `pnpm run build`, **Build output directory** to `dist`. Deploy. This deploys both the static app and the `/functions` API (login, callback, me, logout).
+2. **Create a GitHub OAuth App**: GitHub → Settings → Developer settings → [OAuth Apps](https://github.com/settings/developers) → New OAuth App. **Homepage URL**: your site (e.g. `https://your-project.pages.dev`). **Authorization callback URL**: `https://<your-pages-host>/api/auth/callback` (same host as the site). Note the **Client ID** and generate a **Client secret**.
+3. **Set environment variables** in Cloudflare Pages: project → Settings → Environment variables. Add **GITHUB_CLIENT_ID**, **GITHUB_CLIENT_SECRET**, and **SESSION_SECRET** (a random string for signing sessions, e.g. `openssl rand -hex 32`). Redeploy so the Functions pick them up.
+
+If these are set and you do not set `VITE_AUTH_URL`, the Login page shows **Sign in with GitHub** and the app shows “Signed in as …” and Sign out after auth.
+
+### Protecting the site with Cloudflare Access
+
+To require login before anyone can open the deployed site (e.g. your `*.pages.dev` or custom domain):
+
+1. In [Cloudflare Dashboard](https://dash.cloudflare.com) go to **Zero Trust** → **Access** → **Applications**.
+2. **Add an application**: choose **Self-hosted**; set the application name and **Session Duration** if you want.
+3. **Application domain**: add your site hostname (e.g. `codeworld-2m2.pages.dev` or your custom domain). Use the same subdomain you use to open the app.
+4. **Policies**: add a policy (e.g. **Include** → **Non-identity** → **One-time PIN** for email-based login, or add an IdP like Google/GitHub). Save.
+5. After that, opening the site in a browser will show the Access login first; after auth, users see the app.
+
+The in-app **Sign in** link and `/login` page are still useful for re-authenticating (e.g. after session expiry). Set `VITE_AUTH_URL` to your site’s own URL (e.g. `https://your-site.pages.dev`) so the Sign in button sends users to the same origin and Access will challenge them again.
 
 ## Deploy (Cloudflare Pages)
 
